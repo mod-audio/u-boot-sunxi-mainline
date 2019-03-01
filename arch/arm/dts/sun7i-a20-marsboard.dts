@@ -1,0 +1,18 @@
+/*
+ * Skeleton device tree; the bare minimum needed to boot; just include and
+ * add a compatible value.  The bootloader will typically populate the memory
+ * node.
+ */
+
+/dts-v1/;
+#include "sun7i-a20.dtsi"
+/ {
+	model = "HAOYU Electronics Marsboard A20";
+	compatible = "haoyu,a20-marsboard", "allwinner,sun7i-a20";
+
+	#address-cells = <1>;
+	#size-cells = <1>;
+	chosen { };
+	aliases { };
+	memory { device_type = "memory"; reg = <0 0>; };
+};
