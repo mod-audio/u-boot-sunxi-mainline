@@ -5,3 +5,52 @@ CONFIG_DEFAULT_DEVICE_TREE="sun7i-a20-marsboard"
 CONFIG_SPL=y
 CONFIG_SPL_I2C_SUPPORT=y
 CONFIG_SPL_TEXT_BASE=0x60
+
+## --- WmT, testing: CONFIG_DRAM_CLK
+## Failsafe DRAM settings (also applicable to SPL)
+##	+S:CONFIG_DRAM_CLK=360
+##	+S:CONFIG_DRAM_ZQ=123
+##	+S:CONFIG_DRAM_EMR1=4
+##	+S:CONFIG_DRAM_TIMINGS_DDR3_800E_1066G_1333J=y
+## ...Cubieboard ends up with CONFIG_DRAM_CLK=480
+CONFIG_DRAM_CLK=360
+CONFIG_DRAM_ZQ=123
+CONFIG_DRAM_TIMINGS_DDR3_800E_1066G_1333J=y
+CONFIG_NR_DRAM_BANKS=1
+## ---
+
+## --- WmT, testing: CONFIG_MMC0_CD_PIN
+##	...empty implies card detection is disabled
+##	...is set in Cubieboard2 DT (but "no card present" if used)
+##	...set in DT for Marsboard_A10 (but not desirable?)
+##CONFIG_MMC0_CD_PIN="PH1"
+CONFIG_MMC0_CD_PIN=""
+##CONFIG_MMC_SUNXI_SLOT_EXTRA=2
+## ---
+## --- WmT, 2019-03-12: old kernel support
+## About CONFIG_OLD_SUNXI_KERNEL_COMPAT
+##	...related to supervisor (SVC) vs hypervisor (HYP) mode?
+##	..._NONSEC && !_BOOT_SEC_DEFAULT -> hypervisor mode ("nonsec")
+## U-Boot PSCI interface requires "nonsec" (HYP) mode;
+##	...U-Boot will automatically provide PSCI device nodes
+## Where kernels don't support non-secure mode, set bootm_boot_mode=sec
+CONFIG_OLD_SUNXI_KERNEL_COMPAT=y
+CONFIG_ARMV7_NONSEC=y
+CONFIG_ARMV7_BOOT_SEC_DEFAULT=y
+## ---
+
+## --- WmT, 2019-03-14: Ethernet support
+## CONFIG_NET is on by default
+##	...and for sunxi needs patching to turn off
+## Possible (but non-obvious) benefit from further options:
+##	CONFIG_SUN7I_GMAC_FORCE_TXERR=y
+##	CONFIG_PHY_FIXED=y
+CONFIG_NET=y
+CONFIG_ETH_DESIGNWARE=y
+CONFIG_MII=y
+CONFIG_SUN4I_EMAC=y
+CONFIG_SUN7I_GMAC=y
+##CONFIG_SUN7I_GMAC_FORCE_TXERR=y
+##CONFIG_PHY_FIXED=y
+##CONFIG_GMAC_TX_DELAY defaults to 0
+## ---
