@@ -54,7 +54,12 @@
 	#size-cells = <1>;
 
 	aliases {
+#if 1	/* a10-marsboard (when 1) vs a20-marsboard (when 0) */
+
+		ethernet0 = &emac;
+#else
 		ethernet0 = &gmac;
+#endif
 	};
 
 	chosen {

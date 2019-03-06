@@ -6,13 +6,171 @@
 
 /dts-v1/;
 #include "sun7i-a20.dtsi"
+#include "sunxi-common-regulators.dtsi"
+
 / {
 	model = "HAOYU Electronics Marsboard A20";
 	compatible = "haoyu,a20-marsboard", "allwinner,sun7i-a20";
 
 	#address-cells = <1>;
 	#size-cells = <1>;
-	chosen { };
+
+	chosen {
+		stdout-path = &uart0;
+	};
+
 	aliases { };
+
 	memory { device_type = "memory"; reg = <0 0>; };
+};
+
+&ahci {
+	status = "okay";
+};
+
+&codec {
+	status = "okay";
+};
+
+&ehci0 {
+	status = "okay";
+};
+
+&ehci1 {
+	status = "okay";
+};
+
+&emac_sram {
+	status = "okay";
+};
+
+#if 1	/* a10-marsboard (when 1) vs a20-marsboard (when 0) */
+&emac {
+	phy = <&phy1>;
+	status = "okay";
+};
+#endif
+
+&i2c0 {
+	status = "okay";
+};
+
+&i2c1 {
+	status = "okay";
+};
+
+&i2c2 {
+	status = "okay";
+};
+
+#if 1	/* a10-marsboard (when 1) vs a20-marsboard (when 0) */
+&mdio {
+	status = "okay";
+
+#if 1	/* a10-marsboard verbatim has 'phy1' here (and in 'emac') */
+	phy1: ethernet-phy@1 {
+		reg = <1>;
+	};
+#else	/* kernel dtb uses phy0 (and phy1 for gmac) */
+	/* Cubieboard2 also has (only) gmac, using phy1 */
+	phy0: ethernet-phy@0 {
+		reg = <0>;
+	};
+#endif
+};
+#else	/* 'gmac' presence matches Cubieboard2 */
+	/* NB. phy1 use conflicts with mdio as per a10-marsboard */
+&gmac {
+	pinctrl-names = "default";
+	pinctrl-0 = <&gmac_pins_mii_a>;	/* kernel: gmac_mii_pins */
+	phy = <&phy1>;
+	phy-mode = "mii";
+	status = "okay";
+
+	phy1: ethernet-phy@1 {
+		reg = <1>;
+	};
+};
+#endif
+
+&mmc0 {
+#if 0
+// sun4i-a10.dts creates mmc0_pins for "PF0" to "PF5"
+// sun7i-a20.dts creates mmc0_pins_a for "PF0" to "PF5"
+// Cubieboard2 and A20-Marsboard has "PH1" for cd-gpio/s
+// Cubieboard2 also declares &pinctrl-{names|0}
+	pinctrl-names = "default";
+	pinctrl-0 = <&mmc0_pins_a>;
+#endif
+	vmmc-supply = <&reg_vcc3v3>;
+	bus-width = <4>;
+#if 0	/* ?! because "MMC: no card present" */
+	/* does not cause issues in kernel */
+	cd-gpios = <&pio 7 1 GPIO_ACTIVE_LOW>; /* PH1 */
+#endif
+	status = "okay";
+};
+
+&ohci0 {
+	status = "okay";
+};
+
+&ohci1 {
+	status = "okay";
+};
+
+&otg_sram {
+	status = "okay";
+};
+
+&pio {
+	usb0_id_detect_pin: usb0-id-detect-pin {
+		pins = "PH4";
+		function = "gpio_in";
+		bias-pull-up;
+	};
+};
+
+&reg_usb1_vbus {
+	status = "okay";
+};
+
+&reg_usb2_vbus {
+	status = "okay";
+};
+
+&spi0 {
+	pinctrl-names = "default";
+#if 0	/* prior to 0cc47a8ead a20 dts/i sync to Linux 5.1-rc2 */
+	pinctrl-0 = <&spi0_pins_a>,	/* kernel: spi0_pi_pins */
+		    <&spi0_cs0_pins_a>;	/* kernel: spi0_cs0_pi_pin */
+#else
+	pinctrl-0 = <&spi0_pi_pins>,
+		    <&spi0_cs0_pi_pin>;
+#endif
+	status = "okay";
+};
+
+&uart0 {
+	pinctrl-names = "default";
+#if 0	/* prior to 0cc47a8ead a20 dts/i sync to Linux 5.1-rc2 */
+	pinctrl-0 = <&uart0_pins_a>;	/* kernel: uart0_pb_pins */
+#else
+	pinctrl-0 = <&uart0_pb_pins>;
+#endif
+	status = "okay";
+};
+
+&usb_otg {
+	dr_mode = "otg";
+	status = "okay";
+};
+
+&usbphy {
+	pinctrl-names = "default";
+	pinctrl-0 = <&usb0_id_detect_pin>;
+	usb0_id_det-gpio = <&pio 7 4 GPIO_ACTIVE_HIGH>; /* PH4 */
+	usb1_vbus-supply = <&reg_usb1_vbus>;
+	usb2_vbus-supply = <&reg_usb2_vbus>;
+	status = "okay";
 };
