@@ -13,6 +13,20 @@
 #include <dt-bindings/reset/sun4i-a10-ccu.h>
 
 static struct ccu_clk_gate a10_gates[] = {
+#if 1	/* WmT */
+#ifdef CONFIG_MACH_SUN7I
+/* kernel: drivers/clk/sunxi-ng/ccu-sun4i-a10.c: */
+// 385 /* Not present on A10 */
+// 386 static SUNXI_CCU_GATE(ahb_gmac_clk,     "ahb-gmac",     "ahb",
+// 387                       0x064, BIT(17), 0);
+//1270                 [CLK_AHB_GMAC]          = &ahb_gmac_clk.common.hw,
+	[CLK_AHB_GMAC]          = GATE(0x064, BIT(17)),
+	/* ...and probably a reset variant of this? */
+	/* ...see also AHB_GATE_OFFSET_GMAC references? */
+#else
+#error "AKK"
+#endif
+#endif
 	[CLK_AHB_OTG]		= GATE(0x060, BIT(0)),
 	[CLK_AHB_EHCI0]		= GATE(0x060, BIT(1)),
 	[CLK_AHB_OHCI0]		= GATE(0x060, BIT(2)),
