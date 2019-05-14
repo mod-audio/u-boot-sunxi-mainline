@@ -17,3 +17,19 @@ CONFIG_OLD_SUNXI_KERNEL_COMPAT=y
 CONFIG_ARMV7_NONSEC=y
 CONFIG_ARMV7_BOOT_SEC_DEFAULT=y
 ## ---
+
+## --- WmT, 2019-03-14: Ethernet support
+## CONFIG_NET is on by default normally
+##	...and for sunxi needs patching to turn off
+##	EMAC overkill? (Useful only for Marsboard?)
+## Possible (but non-obvious) benefit from further options:
+##	CONFIG_SUN7I_GMAC_FORCE_TXERR=y
+##	CONFIG_PHY_FIXED=y
+CONFIG_NET=y
+CONFIG_ETH_DESIGNWARE=y
+CONFIG_MII=y
+CONFIG_SUN4I_EMAC=y
+CONFIG_SUN7I_GMAC=y
+##CONFIG_SUN7I_GMAC_FORCE_TXERR=y
+##CONFIG_PHY_FIXED=y
+##CONFIG_GMAC_TX_DELAY defaults to 0
