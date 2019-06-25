@@ -204,7 +204,11 @@ int mtd_parse_partitions(struct mtd_info *parent, const char **_mtdparts,
 {
 	struct mtd_partition partition = {}, *parts;
 	const char *mtdparts = *_mtdparts;
+#if 0	/* WmT: suspected integer overflow on 8GB device */
 	int cur_off = 0, cur_sz = 0;
+#else
+	unsigned long long cur_off = 0, cur_sz = 0;
+#endif
 	int nparts = 0;
 	int ret, idx;
 	u64 sz;
@@ -588,6 +592,9 @@ static struct mtd_info *allocate_partition(struct mtd_info *master,
 	/* set up the MTD object for this partition */
 	slave->type = master->type;
 	slave->flags = master->flags & ~part->mask_flags;
+#if 1	/* WmT */
+;printk(KERN_WARNING "%s(): set slave->size from part->size %llu\n", __func__, part->size);
+#endif
 	slave->size = part->size;
 	slave->writesize = master->writesize;
 	slave->writebufsize = master->writebufsize;
@@ -596,6 +603,9 @@ static struct mtd_info *allocate_partition(struct mtd_info *master,
 	slave->subpage_sft = master->subpage_sft;
 
 	slave->name = name;
+#if 1	/* WmT */
+;printk(KERN_WARNING "%s(): set slave->name %s\n", __func__, slave->name);
+#endif
 	slave->owner = master->owner;
 #ifndef __UBOOT__
 	slave->backing_dev_info = master->backing_dev_info;
@@ -665,6 +675,9 @@ static struct mtd_info *allocate_partition(struct mtd_info *master,
 	slave->_erase = part_erase;
 	slave->parent = master;
 	slave->offset = part->offset;
+#if 1	/* WmT */
+;printk(KERN_WARNING "%s(): slave->offset set from part->offset %llu\n", __func__, slave->offset);
+#endif
 	INIT_LIST_HEAD(&slave->partitions);
 	INIT_LIST_HEAD(&slave->node);
 
@@ -699,6 +712,9 @@ static struct mtd_info *allocate_partition(struct mtd_info *master,
 	debug("0x%012llx-0x%012llx : \"%s\"\n", (unsigned long long)slave->offset,
 		(unsigned long long)(slave->offset + slave->size), slave->name);
 
+#if 1	/* WmT */
+;printk(KERN_WARNING "%s() o-o-r test: using adjusted offset %llu and size %llu vs master_size %llu (o-o-r: %s)\n", __func__, slave->offset, slave->size, master->size, (slave->offset >= master->size)?"y":"n");
+#endif
 	/* let's do some sanity checks */
 	if (slave->offset >= master->size) {
 		/* let's register it anyway to preserve ordering */
