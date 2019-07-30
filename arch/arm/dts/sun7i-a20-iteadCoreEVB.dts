@@ -297,6 +297,17 @@
 		allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
 	};
 
+#if 0	/* maybe? */
+	usb0_vbus_pin_a: usb0_vbus_pin@0 {
+	/* Matches U-Boot Itead_CoreEVB_A20_defconfig, where we have:
+		CONFIG_USB0_VBUS_PIN="PH17"
+	 */
+		allwinner,pins = "PH17";
+		allwinner,function = "gpio_out";
+		allwinner,drive = <SUN4I_PINCTRL_10_MA>;
+		allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
+	};
+#endif
 };
 
 &reg_ahci_5v {
