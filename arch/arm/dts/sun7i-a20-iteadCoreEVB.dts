@@ -318,6 +318,14 @@
 	status = "okay";
 };
 
+#if 0	/* maybe? [WmT] codekipper@gmail.com original */
+&reg_usb0_vbus {
+	pinctrl-0 = <&usb0_vbus_pin_a>;
+	gpio = <&pio 7 17 GPIO_ACTIVE_HIGH>;
+	status = "okay";
+};
+#endif
+
 &reg_usb1_vbus {
 	status = "okay";
 };
