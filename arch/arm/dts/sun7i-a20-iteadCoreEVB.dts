@@ -334,13 +334,31 @@
 	status = "okay";
 };
 
+#if 0
+&usbphy {
+	pinctrl-names = "default";
+	pinctrl-0 = <&usb0_id_detect_pin>, <&usb0_vbus_detect_pin>;
+	usb0_id_det-gpios = <&pio 7 19 GPIO_ACTIVE_HIGH>; /* PH19 */
+	usb0_vbus_det-gpios = <&pio 7 22 GPIO_ACTIVE_HIGH>; /* PH22 */
+	usb0_vbus-supply = <&reg_usb0_vbus>;
+	usb1_vbus-supply = <&reg_usb1_vbus>;
+	usb2_vbus-supply = <&reg_usb2_vbus>;
+	status = "okay";
+};
+#else
 &usbphy {
 	pinctrl-names = "default";
 	pintctrl-0 = <&usb0_id_detect_pin>;
+#if 0	/* Match Cubieboard2? */
+	usb0_id_det-gpios = <&pio 7 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; /* PH4 */
+#else
 	usb0_id_det-gpio = <&pio 7 4 GPIO_ACTIVE_HIGH>;
+#endif
 	usb1_vbus-supply = <&reg_usb1_vbus>;
 	usb2_vbus-supply = <&reg_usb2_vbus>;
+	//status = "okay";
 };
+#endif
 
 &spdif {
 	pinctrl-names = "default";
