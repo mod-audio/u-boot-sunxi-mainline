@@ -201,6 +201,18 @@
 };
 
 &pio {
+#if 0	/* maybe? */
+	ahci_pwr_pin_itead_core_evb: ahci_pwr_pin@1 {
+	/* Align with Itead_CoreEVB_A20_defconfig, where we have:
+		CONFIG_SATAPWR="PH12"
+	 */
+		allwinner,pins = "PH12";
+		allwinner,function = "gpio_out";
+		allwinner,drive = <SUN4I_PINCTRL_10_MA>;
+		allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
+	};
+#endif
+
 	led_pins_itead_core: led-pins@0 {
 		pins = "PH20","PH21";
 		function = "gpio_out";
@@ -288,6 +300,10 @@
 };
 
 &reg_ahci_5v {
+#if 0	/* TODO: maybe? */
+	pinctrl-0 = <&ahci_pwr_pin_itead_core_evb>;
+	gpio = <&pio 7 12 GPIO_ACTIVE_HIGH>;
+#endif
 	status = "okay";
 };
 
