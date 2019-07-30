@@ -177,16 +177,16 @@
 
 			partition@000000000 {
 				label = "reserved";
-				reg = /bits/ 64 <0x000000000 0x100000000>;
+				reg = /bits/ 64 <0x000000000 0x002000000>;
 				read-only;
 			};
 			partition@100000000 {
-				label = "mlcnand1";
-				reg = /bits/ 64 <0x100000000 0x080000000>;
+				label = "ubi";
+				reg = /bits/ 64 <0x002000000 0x0fa000000>;
 			};
 			partition@180000000 {
-				label = "mlcnand2";
-				reg = /bits/ 64 <0x180000000 0x080000000>;
+				label = "iffy";
+				reg = /bits/ 64 <0x0fc000000 0x004000000>;
 			};
 		};
 	};
