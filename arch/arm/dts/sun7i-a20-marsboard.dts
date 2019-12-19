@@ -5,6 +5,9 @@
 /dts-v1/;
 #include "sun7i-a20.dtsi"
 #include "sunxi-common-regulators.dtsi"
+#if 1	/* for SUN4I_PINCTRL_10_MA, SUN4I_PINCTRL_NO_PULL */
+#include "dt-bindings/pinctrl/sun4i-a10.h"
+#endif
 
 / {
 	model = "HAOYU Electronics Marsboard A20";
@@ -14,10 +17,12 @@
 	#size-cells = <1>;
 
 	chosen {
-		stdout-path = &uart0;
+		stdout-path = "serial0:115200n8";
 	};
 
-	aliases { };
+	aliases {
+		serial0 = &uart0;
+	};
 
 	memory { device_type = "memory"; reg = <0 0>; };
 };
@@ -109,6 +114,54 @@
 	status = "okay";
 };
 
+#if 1	/* https://github.com/armbian/sunxi-DT-overlays/blob/e4dfea8304d66cb3403e5e1b73d2f346349124ec/sun7i-a20/sun7i-a20-nand.dts */
+//	fragment@1 {
+&nfc {
+//		target = <&nfc>;
+//		__overlay__ {
+#if 0	/* mismatch with https://linux-sunxi.org/Mainline_NAND_Howto */
+			#address-cells = <1>;
+			#size-cells = <0>;
+#endif
+			pinctrl-names = "default";
+			pinctrl-0 = <&nand_pins_a>, <&nand_cs0_pins_a>, <&nand_rb0_pins_a>;
+			status = "okay";
+
+			nand@0 {
+#if 1	/* alternative recommended by https://linux-sunxi.org/Mainline_NAND_Howto */
+				#address-cells = <2>;
+				#size-cells = <2>;
+#endif
+				reg = <0>;
+				allwinner,rb = <0>;
+				nand-ecc-mode = "hw";
+#if 1	/* also in https://linux-sunxi.org/Mainline_NAND_Howto */
+				nand-rnd-mode = "hw";
+#endif
+				nand-on-flash-bbt;
+
+				partitions {
+					compatible = "fixed-partitions";
+					#address-cells = <2>;
+					#size-cells = <2>;
+
+/* style as per https://linux-sunxi.org/Mainline_NAND_Howto */
+					partition@000000000 {
+						label = "boot";
+						reg = /bits/ 64 <0x000000000 0x002000000>;
+						read-only;
+					};
+					partition@002000000 {
+						label = "ubi";
+						reg = /bits/ 64 <0x002000000 0x1fe000000>;
+					};
+				};
+			};
+//		};	/* armbian overlay */
+};
+//	};		/* armbian fragment */
+#endif
+
 &ohci0 {
 	status = "okay";
 };
@@ -122,6 +175,79 @@
 };
 
 &pio {
+#if 1	/* https://github.com/armbian/sunxi-DT-overlays/blob/e4dfea8304d66cb3403e5e1b73d2f346349124ec/sun7i-a20/sun7i-a20-nand.dts */
+//	fragment@0 {
+//		target = <&pio>;
+//		__overlay__ {
+			nand_pins_a: nand_pins@0 {
+				pins = "PC0", "PC1", "PC2",
+						"PC5", "PC8", "PC9", "PC10",
+						"PC11", "PC12", "PC13", "PC14",
+						"PC15", "PC16";
+				function = "nand0";
+#if 1	/* also in https://linux-sunxi.org/Mainline_NAND_Howto */
+				allwinner,drive = <SUN4I_PINCTRL_10_MA>;
+				allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
+#endif
+			};
+
+			nand_cs0_pins_a: nand_cs@0 {
+				pins = "PC4";
+				function = "nand0";
+#if 1	/* also in https://linux-sunxi.org/Mainline_NAND_Howto */
+				allwinner,drive = <SUN4I_PINCTRL_10_MA>;
+				allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
+#endif
+			};
+
+			nand_cs1_pins_a: nand_cs@1 {
+				pins = "PC3";
+				function = "nand0";
+#if 1	/* also in https://linux-sunxi.org/Mainline_NAND_Howto */
+				allwinner,drive = <SUN4I_PINCTRL_10_MA>;
+				allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
+#endif
+			};
+
+			nand_cs2_pins_a: nand_cs@2 {
+				pins = "PC17";
+				function = "nand0";
+#if 1	/* also in https://linux-sunxi.org/Mainline_NAND_Howto */
+				allwinner,drive = <SUN4I_PINCTRL_10_MA>;
+				allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
+#endif
+			};
+
+			nand_cs3_pins_a: nand_cs@3 {
+				pins = "PC18";
+				function = "nand0";
+#if 1	/* also in https://linux-sunxi.org/Mainline_NAND_Howto */
+				allwinner,drive = <SUN4I_PINCTRL_10_MA>;
+				allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
+#endif
+			};
+
+			nand_rb0_pins_a: nand_rb@0 {
+				pins = "PC6";
+				function = "nand0";
+#if 1	/* also in https://linux-sunxi.org/Mainline_NAND_Howto */
+				allwinner,drive = <SUN4I_PINCTRL_10_MA>;
+				allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
+#endif
+			};
+
+			nand_rb1_pins_a: nand_rb@1 {
+				pins = "PC7";
+				function = "nand0";
+#if 1	/* also in https://linux-sunxi.org/Mainline_NAND_Howto */
+				allwinner,drive = <SUN4I_PINCTRL_10_MA>;
+				allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
+#endif
+			};
+//		};
+//	};
+#endif
+
 	usb0_id_detect_pin: usb0-id-detect-pin {
 		pins = "PH4";
 		function = "gpio_in";
