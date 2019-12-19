@@ -54,3 +54,46 @@ CONFIG_SUN7I_GMAC=y
 ##CONFIG_PHY_FIXED=y
 ##CONFIG_GMAC_TX_DELAY defaults to 0
 ## ---
+
+## --- WmT, 2019-05-28: USB support
+## OHCI/UHCI for USB1.1, EHCI for USB to 2.0, XHCI for USB to 3.0
+## NB. Device tree includes &ehci{0|1} and &ohci{0|1}
+## CONFIG_USB_KEYBOARD=y should be enabled by default
+## U-Boot is too big if all these are enabled?
+#CONFIG_USB_XHCI_HCD=y
+CONFIG_USB_EHCI_HCD=y
+#CONFIG_USB_OHCI_HCD=y
+#CONFIG_USB_UHCI_HCD=y
+## ---
+
+### --- WmT, 2019-05-29: NAND support
+CONFIG_NAND=y
+## CONFIG_NAND_SUNXI becomes enabled by default
+## "Micron MT29F64G08CBABAWP" (dmesg) -> `mtdinfo -a` report:
+##| Eraseblock size:                2097152 bytes, 2.0 MiB
+##| Sub-page size:                  8192 bytes
+##| OOB size:                       744 bytes
+CONFIG_SYS_NAND_BLOCK_SIZE=2097152
+CONFIG_SYS_NAND_PAGE_SIZE=8192
+CONFIG_SYS_NAND_OOBSIZE=744
+CONFIG_CMD_NAND=y
+CONFIG_CMD_MTDPARTS=y
+## About devices and partition scheme:
+## - Smallest permissible division matches the 2MiB block size
+## - 2G "max" size needed to avoid issues initialising larger partitions
+CONFIG_MTD=y
+CONFIG_MTDIDS_DEFAULT="nand0=mlc0"
+##CONFIG_MTDPARTS_DEFAULT="mtdparts=mlc0:4G(reserved)ro,-(mlcnand1)"
+##CONFIG_MTDPARTS_DEFAULT="mtdparts=mlc0:4G(reserved)ro,1G(mlcnand1),-(mlcnand2)"
+CONFIG_MTDPARTS_DEFAULT="mtdparts=mlc0:32M(boot)ro,-(ubi)"
+### ---
+
+### --- WmT, 2019-06-17: boot config
+# CONFIG_ENV_IS_IN_FAT is not set
+CONFIG_ENV_IS_IN_UBI=y
+##| CONFIG_ENV_UBI_PART=""
+CONFIG_ENV_UBI_PART="ubi"
+##| CONFIG_ENV_UBI_VOLUME=""
+CONFIG_ENV_UBI_VOLUME="env"
+## also CONFIG_ENV_UBI_VOLUME_REDUND?
+### ---
