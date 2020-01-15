@@ -33,10 +33,13 @@ CONFIG_MMC0_CD_PIN=""
 ##	..._NONSEC && !_BOOT_SEC_DEFAULT -> hypervisor mode ("nonsec")
 ## U-Boot PSCI interface requires "nonsec" (HYP) mode;
 ##	...U-Boot will automatically provide PSCI device nodes
-## Where kernels don't support non-secure mode, set bootm_boot_mode=sec
+## For legacy kernels, non-secure mode is not supported;
+##	...ensure `setenv bootm_boot_mode=sec`
+##	...ensure script_parser_fetch() requirements are met (boot.scr?)
 CONFIG_OLD_SUNXI_KERNEL_COMPAT=y
 CONFIG_ARMV7_NONSEC=y
-CONFIG_ARMV7_BOOT_SEC_DEFAULT=y
+CONFIG_ARMV7_BOOT_SEC_DEFAULT=n
+CONFIG_ARMV7_LPAE=n
 ## ---
 
 ## --- WmT, 2019-03-14: Ethernet support
