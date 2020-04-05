@@ -361,8 +361,12 @@ ulong env_get_hex(const char *varname, ulong default_val)
 
 int eth_env_get_enetaddr(const char *name, uint8_t *enetaddr)
 {
+#ifdef CONFIG_USB_HOST_ETHER
 	eth_parse_enetaddr(env_get(name), enetaddr);
 	return is_valid_ethaddr(enetaddr);
+#else
+	return -1;
+#endif
 }
 
 int eth_env_set_enetaddr(const char *name, const uint8_t *enetaddr)
