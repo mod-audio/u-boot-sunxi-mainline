@@ -1698,6 +1698,7 @@ static int sunxi_nand_chip_init(int node, struct sunxi_nfc *nfc, int devnum)
 	/* Default tR value specified in the ONFI spec (chapter 4.15.1) */
 	nand->chip_delay = 200;
 	nand->controller = &nfc->controller;
+	nand->options |= NAND_NEED_SCRAMBLING;
 	/*
 	 * Set the ECC mode to the default value in case nothing is specified
 	 * in the DT.

@@ -77,20 +77,16 @@
 
 &reg_dcdc2 {
 	regulator-always-on;
-	regulator-min-microvolt = <1000000>;
+	regulator-min-microvolt = <1400000>;
 	regulator-max-microvolt = <1400000>;
 	regulator-name = "vdd-cpu";
 };
 
 &reg_dcdc3 {
 	regulator-always-on;
-	regulator-min-microvolt = <1000000>;
-	regulator-max-microvolt = <1400000>;
+	regulator-min-microvolt = <1300000>;
+	regulator-max-microvolt = <1300000>;
 	regulator-name = "vdd-int-dll";
-};
-
-&reg_ldo1 {
-	regulator-name = "vdd-rtc";
 };
 
 &reg_ldo2 {
@@ -112,50 +108,16 @@
 				"PC11", "PC12", "PC13", "PC14",
 				"PC15", "PC16";
 		function = "nand0";
-		allwinner,drive = <SUN4I_PINCTRL_10_MA>;
-		allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
 	};
 
 	nand_cs0_pins_a: nand_cs@0 {
 		pins = "PC4";
 		function = "nand0";
-		allwinner,drive = <SUN4I_PINCTRL_10_MA>;
-		allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
-	};
-
-	nand_cs1_pins_a: nand_cs@1 {
-		pins = "PC3";
-		function = "nand0";
-		allwinner,drive = <SUN4I_PINCTRL_10_MA>;
-		allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
-	};
-
-	nand_cs2_pins_a: nand_cs@2 {
-		pins = "PC17";
-		function = "nand0";
-		allwinner,drive = <SUN4I_PINCTRL_10_MA>;
-		allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
-	};
-
-	nand_cs3_pins_a: nand_cs@3 {
-		pins = "PC18";
-		function = "nand0";
-		allwinner,drive = <SUN4I_PINCTRL_10_MA>;
-		allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
 	};
 
 	nand_rb0_pins_a: nand_rb@0 {
 		pins = "PC6";
 		function = "nand0";
-		allwinner,drive = <SUN4I_PINCTRL_10_MA>;
-		allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
-	};
-
-	nand_rb1_pins_a: nand_rb@1 {
-		pins = "PC7";
-		function = "nand0";
-		allwinner,drive = <SUN4I_PINCTRL_10_MA>;
-		allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
 	};
 };
 
@@ -170,6 +132,8 @@
 		reg = <0>;
 		allwinner,rb = <0>;
 		nand-ecc-mode = "hw";
+		nand-ecc-strength = <40>;
+		nand-ecc-step-size = <1024>;
 		nand-on-flash-bbt;
 	};
 };
